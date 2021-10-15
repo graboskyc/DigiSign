@@ -32,6 +32,9 @@ Supported options for the type of screen are:
 * Every 15 seconds or so the Pi will update to check if it is registered and start the slideshow
 * Add to the `screens` collection with the screens needed to rotate
 
+# Registration
+![](Screenshots/ss01.png)
+
 # Sample docs
 ## Registration on initial reg
 ```
