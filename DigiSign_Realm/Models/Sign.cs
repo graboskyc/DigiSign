@@ -12,10 +12,6 @@ namespace DigiSign_Realm.Models
         [MapTo("_id")]
         public ObjectId Id { get; set; } = ObjectId.GenerateNewId();
 
-        [MapTo("feed")]
-        [Required]
-        public string Feed { get; set; }
-
         [MapTo("order")]
         public int Order { get; set; } = 0;
 
@@ -25,6 +21,10 @@ namespace DigiSign_Realm.Models
         [MapTo("type")]
         [Required]
         public string Type { get; set; }
+
+        [MapTo("feed")]
+        [Required]
+        public string Feed { get; set; }
 
         [MapTo("name")]
         [Required]

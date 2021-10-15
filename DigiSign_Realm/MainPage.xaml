@@ -10,7 +10,8 @@
 
     <Grid Background="#FF000000" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <StackPanel Name="ctr_configstack" Orientation="Vertical" VerticalAlignment="Stretch">
-            <TextBlock Foreground="White" Margin="0,50,0,0" FontSize="30">Sign list is null or zero length</TextBlock>
+            <TextBlock Foreground="White" Margin="0,50,0,0" FontSize="30">Sign list is null, zero length, or device not provisioned</TextBlock>
+            <TextBox Name="txt_deviceID" Text="" Foreground="White" Margin="0,10,0,0"></TextBox>
             <TextBox Name="txt_error" Text="" Foreground="White" Margin="0,10,0,0"></TextBox>
         </StackPanel>
         <Image x:Name="ctr_view_image" Visibility="Collapsed" />

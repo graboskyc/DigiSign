@@ -8,7 +8,7 @@
 
   <Identity
     Name="c9743189-09bd-4ff7-a79e-223e1c1ae131"
-    Publisher="CN=chris"
+    Publisher="CN=us.gsky.digisignrealm"
     Version="1.0.0.0" />
 
   <mp:PhoneIdentity PhoneProductId="c9743189-09bd-4ff7-a79e-223e1c1ae131" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>

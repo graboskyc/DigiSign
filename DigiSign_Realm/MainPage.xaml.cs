@@ -2,25 +2,15 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
 using Realms;
-using Realms.Sync;
-using MongoDB.Bson;
-
 using System.Threading.Tasks;
 using Windows.UI.ViewManagement;
 using Windows.UI;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.ApplicationModel.Resources;
+using Windows.Security.ExchangeActiveSyncProvisioning;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -36,6 +26,7 @@ namespace DigiSign_Realm
         int _currentTimer = 0;
         string _realmAppID = "";
         string _realmAPIKey = "";
+        string _realmPartition = "";
 
         public Realms.Sync.App app { get; set; }
         public Realms.Sync.User user { get; set; }
@@ -44,6 +35,7 @@ namespace DigiSign_Realm
         public string partition { get; set; }
         private IQueryable<Models.Sign> allSigns = null;
         private List<Models.Sign> allSignsList = null;
+        private List<IDisposable> _tokens = null;
 
         public MainPage()
         {
@@ -61,6 +53,7 @@ namespace DigiSign_Realm
             var resources = new ResourceLoader("Resources");
             _realmAppID = resources.GetString("AutoProvsionRealmAppID");
             _realmAPIKey = resources.GetString("AutoProvisionRealmAPIKey");
+            //_realmPartition = resources.GetString("AutoProvisionRealmParition");
 
             _disTimer = new DispatcherTimer();
             _disTimer.Tick += _disTimer_Tick;
@@ -70,19 +63,38 @@ namespace DigiSign_Realm
 
         public async Task EnableSync()
         {
+            //https://stackoverflow.com/questions/31746613/how-do-i-get-a-unique-identifier-for-a-device-within-windows-10-universal
+            var deviceInformation = new EasClientDeviceInformation();
+            string deviceID = deviceInformation.FriendlyName.ToString() + deviceInformation.Id.ToString();
+            txt_deviceID.Text = deviceID;
+
+            // connect
             app = Realms.Sync.App.Create(_realmAppID);
             user = await app.LogInAsync(Realms.Sync.Credentials.ApiKey(_realmAPIKey));
-            //partition = $"user={ user.Id }";
-            partition = "ALL";
-            config = new Realms.Sync.SyncConfiguration(partition, user);
-            realm = await Realm.GetInstanceAsync(config);
-            allSigns = realm.All<Models.Sign>();
 
-            var token = realm.All<Models.Sign>().SubscribeForNotifications((sender, changes, error) =>
+            // get auto provision details
+            var bsonval = await user.Functions.CallAsync("getMyPartitions", deviceID);
+            _realmPartition = bsonval.ToString();
+
+            if (_realmPartition.Length < 2)
             {
-                allSigns.OrderBy(sign => sign.Order);
-                DisplayNext();
-            });
+                await Task.Delay(TimeSpan.FromSeconds(15));
+                EnableSync();
+            }
+            else
+            {
+                // get actual signs
+                config = new Realms.Sync.SyncConfiguration("GLOBAL", user);
+                realm = await Realm.GetInstanceAsync(config);
+
+                allSigns = realm.All<Models.Sign>();
+
+                var token = realm.All<Models.Sign>().SubscribeForNotifications((sender, changes, error) =>
+                {
+                    allSigns.OrderBy(sign => sign.Order);
+                    DisplayNext();
+                });
+            }
         }
 
         private void _disTimer_Tick(object sender, object e)
@@ -92,6 +104,7 @@ namespace DigiSign_Realm
 
         async void DisplayNext()
         {
+
             if (allSigns == null)
             {
                 ctr_configstack.Visibility = Visibility.Visible;
@@ -119,13 +132,18 @@ namespace DigiSign_Realm
                     _currentIndex = 0;
                 }
 
-                allSignsList = allSigns.ToList();
+                var partitions = _realmPartition.Split(",").ToList();
 
-                Models.Sign s = allSignsList[_currentIndex];
+                Models.Sign s = allSigns.OrderBy(sign => sign.Order).ElementAt(_currentIndex);
 
                 if (s.Type == "hide")
                 {
-                    _currentIndex = _currentIndex + 1;
+                    _currentIndex++;
+                    DisplayNext();
+                } 
+                // cant figure out linq syntax for this 
+                else if (!partitions.Contains(s.Feed)) {
+                    _currentIndex++;
                     DisplayNext();
                 }
                 else
@@ -177,7 +195,7 @@ namespace DigiSign_Realm
                     _disTimer.Interval = new TimeSpan(0, 0, _currentTimer);
                     _disTimer.Start();
 
-                    _currentIndex = _currentIndex + 1;
+                    _currentIndex++;
                 }
             }
 
