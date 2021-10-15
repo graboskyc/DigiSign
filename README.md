@@ -26,11 +26,11 @@ Supported options for the type of screen are:
 * Copy the `Resources.resw.sample` into `Resources.resw` and enter the Realm App ID and the API key you generated above
 * Deploy the app onto the Pi
 * It will wait on the registration page seen above in the screenshot
-* Once you have content in your `Screens` collection, continue on
+* Once you have content in your `Signs` collection, continue on
 * The device will have booted and you should see a record in the  `Registration` collection
 * Edit the record to have the `feed` field and the attribute a comma-delimited string of feeds such as `ALL,menus` to get feeds for `ALL` and `menus`
 * Every 15 seconds or so the Pi will update to check if it is registered and start the slideshow
-* Add to the `screens` collection with the screens needed to rotate
+* Add to the `Signs` collection with the screens needed to rotate
 
 # Registration
 ![](Screenshots/ss01.png)
@@ -57,7 +57,7 @@ Supported options for the type of screen are:
 }
 ```
 
-## Screens
+## Signs
 ```
 {
     "_id":{"$oid":"6168db3743322967229f0615"},
