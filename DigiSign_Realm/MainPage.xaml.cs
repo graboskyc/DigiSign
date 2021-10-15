@@ -5,12 +5,16 @@ using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Realms;
+using Realms.Sync;
 using System.Threading.Tasks;
 using Windows.UI.ViewManagement;
 using Windows.UI;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.ApplicationModel.Resources;
 using Windows.Security.ExchangeActiveSyncProvisioning;
+using Windows.Networking;
+using Windows.Networking.Connectivity;
+using Windows.Storage.Streams;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -63,10 +67,23 @@ namespace DigiSign_Realm
 
         public async Task EnableSync()
         {
-            //https://stackoverflow.com/questions/31746613/how-do-i-get-a-unique-identifier-for-a-device-within-windows-10-universal
+            // https://stackoverflow.com/questions/31746613/how-do-i-get-a-unique-identifier-for-a-device-within-windows-10-universal
             var deviceInformation = new EasClientDeviceInformation();
             string deviceID = deviceInformation.FriendlyName.ToString() + deviceInformation.Id.ToString();
             txt_deviceID.Text = deviceID;
+
+            // https://stackoverflow.com/questions/33770429/how-do-i-find-the-local-ip-address-on-a-win-10-uwp-project
+            foreach (HostName localHostName in NetworkInformation.GetHostNames())
+            {
+                if (localHostName.IPInformation != null)
+                {
+                    if (localHostName.Type == HostNameType.Ipv4)
+                    {
+                        txt_ipaddr.Text = localHostName.ToString();
+                        break;
+                    }
+                }
+            }
 
             // connect
             app = Realms.Sync.App.Create(_realmAppID);
@@ -78,14 +95,19 @@ namespace DigiSign_Realm
 
             if (_realmPartition.Length < 2)
             {
+                txt_error.Text = "Registration API returned empty or null.";
                 await Task.Delay(TimeSpan.FromSeconds(15));
                 EnableSync();
             }
             else
             {
+                txt_error.Text = "Syncing signs...";
+
                 // get actual signs
                 config = new Realms.Sync.SyncConfiguration("GLOBAL", user);
                 realm = await Realm.GetInstanceAsync(config);
+
+                await realm.GetSession().WaitForDownloadAsync();
 
                 allSigns = realm.All<Models.Sign>();
 
@@ -113,7 +135,7 @@ namespace DigiSign_Realm
                 ctr_view_text.Visibility = Visibility.Collapsed;
                 ctr_view_web.Visibility = Visibility.Collapsed;
 
-                txt_error.Text = "Size is null";
+                txt_error.Text = "Registration success; screen list is null.";
             }
             else if (allSigns.Count() == 0)
             {
@@ -123,7 +145,7 @@ namespace DigiSign_Realm
                 ctr_view_text.Visibility = Visibility.Collapsed;
                 ctr_view_web.Visibility = Visibility.Collapsed;
 
-                txt_error.Text = "Count is " + allSigns.Count().ToString();
+                txt_error.Text = "Registration success; screen count is " + allSigns.Count().ToString();
             }
             else
             { 
@@ -180,6 +202,25 @@ namespace DigiSign_Realm
                         BitmapImage imageSource = new BitmapImage(new Uri(s.URI));
                         ctr_view_image.Width = imageSource.DecodePixelHeight = (int)this.ActualWidth;
                         ctr_view_image.Source = imageSource;
+                    }
+                    else if (s.Type == "base64image")
+                    {
+                        ctr_view_image.Visibility = Visibility.Visible;
+                        ctr_view_web.Visibility = Visibility.Collapsed;
+                        ctr_view_text.Visibility = Visibility.Collapsed;
+                        ctr_view_media.Visibility = Visibility.Collapsed;
+
+                        var ims = new InMemoryRandomAccessStream();
+                        var bytes = Convert.FromBase64String(s.Text);
+                        var dataWriter = new DataWriter(ims);
+                        dataWriter.WriteBytes(bytes);
+                        await dataWriter.StoreAsync();
+                        ims.Seek(0);
+                        var imageSource = new BitmapImage();
+                        imageSource.SetSource(ims);
+                        ctr_view_image.Width = imageSource.DecodePixelHeight = (int)this.ActualWidth;
+                        ctr_view_image.Source = imageSource;
+
                     }
                     else if (s.Type == "text")
                     {

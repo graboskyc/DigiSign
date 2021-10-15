@@ -10,9 +10,19 @@
 
     <Grid Background="#FF000000" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <StackPanel Name="ctr_configstack" Orientation="Vertical" VerticalAlignment="Stretch">
-            <TextBlock Foreground="White" Margin="0,50,0,0" FontSize="30">Sign list is null, zero length, or device not provisioned</TextBlock>
-            <TextBox Name="txt_deviceID" Text="" Foreground="White" Margin="0,10,0,0"></TextBox>
-            <TextBox Name="txt_error" Text="" Foreground="White" Margin="0,10,0,0"></TextBox>
+            <TextBlock Foreground="White" Margin="50,50,0,0" FontSize="72">DigiSign Registration</TextBlock>
+            
+            <TextBlock Foreground="White" Margin="100,20,0,0" FontSize="30">Waiting for feed...</TextBlock>
+            <ProgressBar x:Name="progressBar1" IsIndeterminate="True" Height="50" Margin="100,10,100,0" Foreground="#FF60A917"/>
+
+            <TextBlock Foreground="White" Margin="100,20,0,0" FontSize="30">Device ID:</TextBlock>
+            <TextBox Name="txt_deviceID" Text="" Foreground="White" Margin="100,10,100,0"></TextBox>
+
+            <TextBlock Foreground="White" Margin="100,20,0,0" FontSize="30">LAN IP:</TextBlock>
+            <TextBox Name="txt_ipaddr" Text="" Foreground="White" Margin="100,10,100,0"></TextBox>
+
+            <TextBlock Foreground="White" Margin="100,20,0,0" FontSize="30">Errors:</TextBlock>
+            <TextBox Name="txt_error" Text="" Foreground="White" Margin="100,10,100,0"></TextBox>
         </StackPanel>
         <Image x:Name="ctr_view_image" Visibility="Collapsed" />
         <WebView x:Name="ctr_view_web" Visibility="Collapsed"/>
