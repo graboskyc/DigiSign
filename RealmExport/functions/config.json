@@ -1,0 +1,11 @@
+[
+    {
+        "name": "canSyncRead",
+        "private": false
+    },
+    {
+        "name": "getMyPartitions",
+        "private": false,
+        "run_as_system": true
+    }
+]

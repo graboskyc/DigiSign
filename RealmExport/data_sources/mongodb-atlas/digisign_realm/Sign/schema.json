@@ -1,0 +1,42 @@
+{
+    "bsonType": "object",
+    "properties": {
+        "_id": {
+            "bsonType": "objectId"
+        },
+        "_pk": {
+            "bsonType": "string"
+        },
+        "duration": {
+            "bsonType": "long"
+        },
+        "feed": {
+            "bsonType": "string"
+        },
+        "name": {
+            "bsonType": "string"
+        },
+        "order": {
+            "bsonType": "long"
+        },
+        "text": {
+            "bsonType": "string"
+        },
+        "type": {
+            "bsonType": "string"
+        },
+        "uri": {
+            "bsonType": "string"
+        }
+    },
+    "required": [
+        "_id",
+        "_pk",
+        "order",
+        "duration",
+        "type",
+        "name",
+        "feed"
+    ],
+    "title": "Sign"
+}
