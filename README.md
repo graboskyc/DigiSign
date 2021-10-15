@@ -58,14 +58,14 @@ Supported options for the type of screen are:
 ```
 {
     "_id":{"$oid":"6168db3743322967229f0615"},
-    "name":"thats all",
-    "uri":"https://stitch-statichosting-prod.s3.amazonaws.com/5be43cf3fdc7289932fcad43/signs/thatsall.jpg",
-    "feed":"ALL",
-    "order":999,
-    "duration":5,
-    "text":"\r\r\r\r\r\r\r\r",
-    "type":"hide",
-    "_pk":"GLOBAL"
+    "name":"name of this sign",             // arbitrary name
+    "uri":"https://foo.com/image.jpg",      // path to website or image
+    "feed":"ALL",                           // show to which devices
+    "order":10,                             // int for order
+    "duration":5,                           // int of seconds to show
+    "text":"",                              // text to display or base64 encode depending on type
+    "type":"hide",                          // see table of types above
+    "_pk":"GLOBAL"                          // keep as shown here for now
 }
 ```
 
