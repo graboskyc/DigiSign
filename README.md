@@ -15,14 +15,18 @@ Supported options for the type of screen are:
 * Web - _web_ - A URL to a website
 
 # Deployment
-* Deploy a Raspberry Pi with Windows 10 IOT
-* Connect it to the network
+## Realm Sync
 * Sign up for MongoDB Atlas 
 * Create a cluster (free tier will work)
 * Using the [Realm-CLI](https://docs.mongodb.com/realm/cli/), import the contents of the `RealmExport` folder
-* Open the Realm App dashboard and confirm sync is enabled on the cluster and the API Key authentication is also enabled
+* Open the Realm App dashboard and confirm sync is enabled on the cluster and the API Key authentication is also enabled and email authentication is enabled
 * Generate an API key and save this string for later
-* Download Visual Studio 2019, open the solution in `Digisign_Realm`
+* Create a user manually (email/password) and you will need this later
+
+## IOT App
+* Deploy a Raspberry Pi with Windows 10 IOT
+* Connect it to the network
+ Download Visual Studio 2019, open the solution in `Digisign_Realm`
 * Copy the `Resources.resw.sample` into `Resources.resw` and enter the Realm App ID and the API key you generated above
 * Deploy the app onto the Pi
 * It will wait on the registration page seen above in the screenshot
@@ -31,6 +35,14 @@ Supported options for the type of screen are:
 * Edit the record to have the `feed` field and the attribute a comma-delimited string of feeds such as `ALL,menus` to get feeds for `ALL` and `menus`
 * Every 15 seconds or so the Pi will update to check if it is registered and start the slideshow
 * Add to the `Signs` collection with the screens needed to rotate
+
+## Realm Admin Pages
+* Make sure Realm web hosting is enabled
+* edit the `DigisignAdminSite/wwwroot/js/realmHooks.js` and change the Realm App ID at thet op
+* Using the dotnet CLI within the `DigisignAdminSite` directory run `dotnet publish -c Release`
+* Upload the contents of the `DigisignAdminSite\bin\Release\net5.0\publish\wwwroot` directory into Realm Hosting
+* Within hosting settings, make sure you enable "single page app" and point it to `index.html`
+* You can now edit pages here to change what shows up on the signs
 
 # Registration
 ![](Screenshots/ss01.png)
