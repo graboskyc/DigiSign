@@ -12,6 +12,9 @@
         <label>Device ID</label>
         <input type="text" @bind="txt_name" @bind:event="onchange" disabled class="form-control" />
 
+        <label>IP Address</label>
+        <input type="text" @bind="txt_ipaddr" @bind:event="onchange" disabled class="form-control" />
+
         <label>Feed</label>
         <input type="text" @bind="txt_feed" @bind:event="onchange" class="form-control" />
 
@@ -32,7 +35,7 @@
 
     private RealmUser user = new RealmUser{};
     private Registration R = null;
-    private string txt_name, txt_feed = "";
+    private string txt_name, txt_feed, txt_ipaddr = "";
     private bool isLoading = false;
 
     private async Task GetReg() {        
@@ -40,12 +43,14 @@
         R = await JSRuntime.InvokeAsync<Registration>("realmShim_Function", "getReg", args);
         txt_name = R.deviceId;
         txt_feed = R.feed;
+        txt_ipaddr = R.ipaddr;
     }
 
     private async Task RunSave() {
         R = new Registration(){
             deviceId = txt_name,
             feed = txt_feed,
+            ipaddr = txt_ipaddr,
             _id = ID
         };
         R = await JSRuntime.InvokeAsync<Registration>("realmShim_Function", "setReg", R);
@@ -66,7 +71,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        string txt_name, txt_feed = "";
+        string txt_name, txt_feed, txt_ipaddr = "";
         
         try
         {
