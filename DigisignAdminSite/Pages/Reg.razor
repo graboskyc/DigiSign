@@ -1,0 +1,80 @@
+@page "/Reg/{ID}"
+@inject IJSRuntime JSRuntime; 
+@inject NavigationManager NavigationManager;
+
+<h1>Edit Registration</h1>
+
+<div class="card">
+    <div class="card-header">
+        <h2>Device @ID</h2>
+    </div>
+    <div class="card-body">
+        <label>Device ID</label>
+        <input type="text" @bind="txt_name" @bind:event="onchange" disabled class="form-control" />
+
+        <label>Feed</label>
+        <input type="text" @bind="txt_feed" @bind:event="onchange" class="form-control" />
+
+        @if(!isLoading) {
+            <button class="btn btn-g btn-lg" @onclick="RunSave" id="btn_save">Save</button>
+            <button class="btn btn-danger btn-lg" @onclick="RunDelete" id="btn_del" style="text-align:center; width:100%; padding:5px; margin-top:10px; margin-bottom:10px;">Delete</button>
+        } else {
+            <button class="btn btn-g btn-lg" disabled ><span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>Processing...</button>
+        }
+
+    </div>
+</div>
+
+
+@code {
+    [Parameter]
+    public string ID {get; set;}
+
+    private RealmUser user = new RealmUser{};
+    private Registration R = null;
+    private string txt_name, txt_feed = "";
+    private bool isLoading = false;
+
+    private async Task GetReg() {        
+        string[] args = {ID};
+        R = await JSRuntime.InvokeAsync<Registration>("realmShim_Function", "getReg", args);
+        txt_name = R.deviceId;
+        txt_feed = R.feed;
+    }
+
+    private async Task RunSave() {
+        R = new Registration(){
+            deviceId = txt_name,
+            feed = txt_feed,
+            _id = ID
+        };
+        R = await JSRuntime.InvokeAsync<Registration>("realmShim_Function", "setReg", R);
+        NavigationManager.NavigateTo("/Regs");
+    }
+
+    private async Task RunDelete() {
+        string[] args = {ID};
+        await JSRuntime.InvokeVoidAsync("realmShim_Function", "deleteReg", args);
+        NavigationManager.NavigateTo("/Regs");
+    }
+
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await GetReg();        
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        string txt_name, txt_feed = "";
+        
+        try
+        {
+            user = await JSRuntime.InvokeAsync<RealmUser>("getUserDetails");
+            await GetReg();
+            
+        } catch(Exception ex) {
+            Console.WriteLine(ex);
+        }
+    }
+}

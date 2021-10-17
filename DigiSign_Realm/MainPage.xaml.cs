@@ -70,7 +70,7 @@ namespace DigiSign_Realm
         {
             // https://stackoverflow.com/questions/31746613/how-do-i-get-a-unique-identifier-for-a-device-within-windows-10-universal
             var deviceInformation = new EasClientDeviceInformation();
-            string deviceID = deviceInformation.FriendlyName.ToString() + deviceInformation.Id.ToString();
+            string deviceID = deviceInformation.FriendlyName.ToString() + "_" + deviceInformation.Id.ToString();
             txt_deviceID.Text = deviceID;
 
             // https://stackoverflow.com/questions/33770429/how-do-i-find-the-local-ip-address-on-a-win-10-uwp-project

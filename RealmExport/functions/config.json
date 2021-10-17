@@ -32,5 +32,25 @@
         "name": "setNewSign",
         "private": false,
         "run_as_system": true
+    },
+    {
+        "name": "getRegsList",
+        "private": false,
+        "run_as_system": true
+    },
+    {
+        "name": "getReg",
+        "private": false,
+        "run_as_system": true
+    },
+    {
+        "name": "setReg",
+        "private": false,
+        "run_as_system": true
+    },
+    {
+        "name": "deleteReg",
+        "private": false,
+        "run_as_system": true
     }
 ]

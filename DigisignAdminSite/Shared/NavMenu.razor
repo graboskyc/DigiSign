@@ -9,13 +9,20 @@
 </div>
 
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
-    <ul class="nav flex-column">        
+    <ul class="nav flex-column">      
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="New">
+                <span class="oi oi-plus" aria-hidden="true"></span> NEW SIGN
+            </NavLink>
+        </li>
+
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="Regs">
+                <span class="oi oi-monitor" aria-hidden="true"></span> REGISTRATION
+            </NavLink>
+        </li>
+
         @if(signs != null) {
-            <li class="nav-item px-3">
-                <NavLink class="nav-link" href="New">
-                    <span class="oi oi-plus" aria-hidden="true"></span> NEW SIGN
-                </NavLink>
-            </li>
             @foreach (var s in signs)
             {
                 <li class="nav-item px-3">

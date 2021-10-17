@@ -1,0 +1,61 @@
+﻿@page "/Regs"
+@inject IJSRuntime JSRuntime;
+
+<h1>Device Registration Portal</h1>
+
+<table class="table table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th>_ID Ending</th>
+            <th>Device ID</th>
+            <th>Feeds</th>
+            <th>Link</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if(regs != null) {
+            @foreach (var r in regs)
+            {
+                <tr>
+                    <td>@r._id.Substring(@r._id.Length - 5)</td>
+                    <td>@r.deviceId</td>
+                    <td>@r.feed</td>
+                    <td>
+                        <a href=@String.Format("/Reg/{0}", r._id)>
+                            <span class="oi oi-link-intact" aria-hidden="true"></span>
+                        </a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+@code {
+    private bool collapseNavMenu = true;
+
+    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private RealmUser user = new RealmUser{};
+
+    private List<Registration> regs = null;
+
+    private async Task GetRegs() {        
+        string[] args = {};
+        regs = await JSRuntime.InvokeAsync<List<Registration>>("realmShim_Function", "getRegsList", args);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            user = await JSRuntime.InvokeAsync<RealmUser>("getUserDetails");
+            await GetRegs();
+        } catch(Exception ex) {
+            Console.WriteLine(ex);
+        }
+    }
+
+
+
+}
