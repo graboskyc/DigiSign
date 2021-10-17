@@ -1,4 +1,14 @@
 {
     "collection": "Sign",
-    "database": "digisign_realm"
+    "database": "digisign_realm",
+    "roles": [
+        {
+            "name": "everyone",
+            "apply_when": {},
+            "insert": true,
+            "delete": true,
+            "search": true,
+            "additional_fields": {}
+        }
+    ]
 }

@@ -3,5 +3,34 @@
         "name": "getMyPartitions",
         "private": false,
         "run_as_system": true
+    },
+    {
+        "name": "resetFunc",
+        "private": true
+    },
+    {
+        "name": "getSignList",
+        "private": false,
+        "run_as_system": true
+    },
+    {
+        "name": "getSign",
+        "private": false,
+        "run_as_system": true
+    },
+    {
+        "name": "setSign",
+        "private": false,
+        "run_as_system": true
+    },
+    {
+        "name": "deleteSign",
+        "private": false,
+        "run_as_system": true
+    },
+    {
+        "name": "setNewSign",
+        "private": false,
+        "run_as_system": true
     }
 ]

@@ -13,6 +13,9 @@
         "feed": {
             "bsonType": "string"
         },
+        "format": {
+            "bsonType": "string"
+        },
         "name": {
             "bsonType": "string"
         },
