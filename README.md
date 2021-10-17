@@ -44,8 +44,19 @@ Supported options for the type of screen are:
 * Within hosting settings, make sure you enable "single page app" and point it to `index.html`
 * You can now edit pages here to change what shows up on the signs
 
-# Registration
+# Registration Pending UI
 ![](Screenshots/ss01.png)
+
+# Admin UI
+![](Screenshots/ss02.png)
+
+![](Screenshots/ss03.png)
+
+![](Screenshots/ss04.png)
+
+![](Screenshots/ss05.png)
+
+![](Screenshots/ss06.png)
 
 # Sample docs
 ## Registration on initial reg
