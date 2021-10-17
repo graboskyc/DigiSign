@@ -1,10 +1,10 @@
 
 .vs/DigiSign_Realm/v16/.suo
-DigiSign_Realm/bin
-DigiSign_Realm/obj
-DigiSign_Realm/Resources.resw
-DigiSign_Realm/AppPackages
-DigiSign_Realm/BundleArtifacts
+IOTApps/UWP/DigiSign_Realm/bin
+IOTApps/UWP/DigiSign_Realm/obj
+IOTApps/UWP/DigiSign_Realm/Resources.resw
+IOTApps/UWP/DigiSign_Realm/AppPackages
+IOTApps/UWP/DigiSign_Realm/BundleArtifacts
 DigisignAdminSite/bin
 DigisignAdminSite/.vs
 DigisignAdminSite/obj

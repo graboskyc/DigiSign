@@ -91,7 +91,7 @@ namespace DigiSign_Realm
             user = await app.LogInAsync(Realms.Sync.Credentials.ApiKey(_realmAPIKey));
 
             // get auto provision details
-            var bsonval = await user.Functions.CallAsync("getMyPartitions", deviceID);
+            var bsonval = await user.Functions.CallAsync("getMyPartitions", deviceID, txt_ipaddr.Text);
             _realmPartition = bsonval.ToString();
 
             if (_realmPartition.Length < 2)
