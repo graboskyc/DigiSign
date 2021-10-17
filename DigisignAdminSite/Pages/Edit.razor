@@ -1,0 +1,104 @@
+@page "/Edit/{ID}"
+@inject IJSRuntime JSRuntime; 
+@inject NavigationManager NavigationManager;
+
+<h1>Edit a Sign</h1>
+
+<div class="card">
+    <div class="card-header">
+        <h2>Sign @ID</h2>
+    </div>
+    <div class="card-body">
+        <label>Name</label>
+        <input type="text" @bind="txt_name" @bind:event="onchange" class="form-control" />
+
+        <label>Feed</label>
+        <input type="text" @bind="txt_feed" @bind:event="onchange" class="form-control" />
+
+        <label>Type</label>
+        <input type="text" @bind="txt_type" @bind:event="onchange" class="form-control" />
+
+        <label>Order</label>
+        <input type="text" @bind="txt_order" @bind:event="onchange" class="form-control" />
+
+        <label>Duration</label>
+        <input type="text" @bind="txt_duration" @bind:event="onchange" class="form-control" />
+
+        <label>URI</label>
+        <input type="text" @bind="txt_uri" @bind:event="onchange" class="form-control" />
+
+        <label>Text</label>
+        <textarea rows="8" @bind="txt_text" @bind:event="onchange" class="form-control"></textarea>
+
+        @if(!isLoading) {
+            <button class="btn btn-g btn-lg" @onclick="RunSave" id="btn_save">Save</button>
+            <button class="btn btn-danger btn-lg" @onclick="RunDelete" id="btn_del" style="text-align:center; width:100%; padding:5px; margin-top:10px; margin-bottom:10px;">Delete</button>
+        } else {
+            <button class="btn btn-g btn-lg" disabled ><span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>Processing...</button>
+        }
+
+    </div>
+</div>
+
+
+@code {
+    [Parameter]
+    public string ID {get; set;}
+
+    private RealmUser user = new RealmUser{};
+    private DigiSign sign = null;
+    private string txt_name, txt_feed, txt_type, txt_order, txt_duration, txt_uri, txt_text = "";
+    private bool isLoading = false;
+
+    private async Task GetSign() {        
+        string[] args = {ID};
+        sign = await JSRuntime.InvokeAsync<DigiSign>("realmShim_Function", "getSign", args);
+        txt_name = sign.name;
+        txt_feed = sign.feed;
+        txt_duration = sign.duration.ToString();
+        txt_order = sign.order.ToString();
+        txt_text = sign.text;
+        txt_type = sign.type;
+        txt_uri = sign.uri;
+    }
+
+    private async Task RunSave() {
+        sign = new DigiSign(){
+            name = txt_name,
+            feed = txt_feed,
+            duration = Int32.Parse(txt_duration),
+            order = Int32.Parse(txt_order),
+            text = txt_text,
+            type = txt_type,
+            uri = txt_uri,
+            _id = ID
+        };
+        sign = await JSRuntime.InvokeAsync<DigiSign>("realmShim_Function", "setSign", sign);
+    }
+
+    private async Task RunDelete() {
+        string[] args = {ID};
+        await JSRuntime.InvokeVoidAsync("realmShim_Function", "deleteSign", args);
+        NavigationManager.NavigateTo("/Home");
+    }
+
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await GetSign();        
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        string txt_name, txt_feed, txt_type, txt_order, txt_duration, txt_uri, txt_text = "";
+        
+        try
+        {
+            user = await JSRuntime.InvokeAsync<RealmUser>("getUserDetails");
+            await GetSign();
+            
+        } catch(Exception ex) {
+            Console.WriteLine(ex);
+        }
+    }
+}

@@ -1,0 +1,120 @@
+@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
+
+html, body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+a, .btn-link {
+    color: #0366d6;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+.content {
+    padding-top: 1.1rem;
+}
+
+.valid.modified:not([type=checkbox]) {
+    outline: 1px solid #26b050;
+}
+
+.invalid {
+    outline: 1px solid red;
+}
+
+.validation-message {
+    color: red;
+}
+
+#blazor-error-ui {
+    background: lightyellow;
+    bottom: 0;
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+    display: none;
+    left: 0;
+    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+}
+
+    #blazor-error-ui .dismiss {
+        cursor: pointer;
+        position: absolute;
+        right: 0.75rem;
+        top: 0.5rem;
+    }
+
+/*=============================*/
+
+@keyframes spin3D {
+    from { transform: rotateY(0deg) }
+    to { transform: rotateY(360deg) }
+}
+.loadingAnni {
+    animation-name: spin3D;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    /* linear | ease | ease-in | ease-out | ease-in-out */
+    animation-timing-function: ease-in-out;
+}
+
+.loadingAnniParent {
+    display: grid;
+    place-items: center;
+    background-color: #60a917;
+    height: 100vh;
+}
+
+.ctr_centered_parent {
+    display: grid;
+    place-items: center;
+    background-color: #60a917;
+    height: 100vh;
+}
+
+.ctr_centered_child {
+    background-color: #fff;
+    text-align: center;
+    width: 40vw;
+    padding:5%;
+}
+
+h1, h2, h3 {
+    color:#647687;
+}
+
+img.invert {
+    -webkit-filter: invert(1);
+   filter: invert(1);
+   text-align:center;
+}
+
+label {
+    color: #647687;
+}
+
+.btn-g {
+    background-color: #60a917;
+    color: #fff;
+    text-align:center;
+    width:100%;
+    padding:5px;
+    margin-top:10px;
+    margin-bottom:10px;
+}
+
+.btn-trans {
+    background-color: #60a917;
+    color: #fff;
+    border-color: #fff;
+    text-align:center;
+    width:55%;
+    padding:5px;
+    margin-top:10px;
+    margin-bottom:10px;
+}

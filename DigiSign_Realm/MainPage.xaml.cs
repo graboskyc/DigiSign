@@ -15,6 +15,7 @@ using Windows.Security.ExchangeActiveSyncProvisioning;
 using Windows.Networking;
 using Windows.Networking.Connectivity;
 using Windows.Storage.Streams;
+using Windows.UI.Xaml.Media;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -240,6 +241,18 @@ namespace DigiSign_Realm
                 }
             }
 
+        }
+
+        private void ctr_view_image_ImageFailed(object sender, ExceptionRoutedEventArgs e)
+        {
+            _currentIndex++;
+            DisplayNext();
+        }
+
+        private void ctr_view_web_NavigationFailed(object sender, WebViewNavigationFailedEventArgs e)
+        {
+            _currentIndex++;
+            DisplayNext();
         }
     }
 }

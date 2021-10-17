@@ -1,0 +1,78 @@
+@page "/New"
+@inject IJSRuntime JSRuntime; 
+@inject NavigationManager NavigationManager;
+
+<h1>New Sign</h1>
+
+<div class="card">
+
+    <div class="card-body">
+        <label>Name</label>
+        <input type="text" @bind="txt_name" @bind:event="onchange" class="form-control" />
+
+        <label>Feed</label>
+        <input type="text" @bind="txt_feed" @bind:event="onchange" class="form-control" />
+
+        <label>Type</label>
+        <input type="text" @bind="txt_type" @bind:event="onchange" class="form-control" />
+
+        <label>Order</label>
+        <input type="text" @bind="txt_order" @bind:event="onchange" class="form-control" />
+
+        <label>Duration</label>
+        <input type="text" @bind="txt_duration" @bind:event="onchange" class="form-control" />
+
+        <label>URI</label>
+        <input type="text" @bind="txt_uri" @bind:event="onchange" class="form-control" />
+
+        <label>Text</label>
+        <textarea rows="8" @bind="txt_text" @bind:event="onchange" class="form-control"></textarea>
+
+        @if(!isLoading) {
+            <button class="btn btn-g btn-lg" @onclick="RunSave" id="btn_save">Save</button>
+        } else {
+            <button class="btn btn-g btn-lg" disabled ><span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>Processing...</button>
+        }
+
+    </div>
+</div>
+
+
+@code {
+
+    private RealmUser user = new RealmUser{};    
+    private DigiSign sign = null;
+    private string txt_name, txt_feed, txt_type, txt_order, txt_duration, txt_uri, txt_text = "";
+    private bool isLoading = false;
+
+    private async Task RunSave() {
+        sign = new DigiSign(){
+            name = txt_name,
+            feed = txt_feed,
+            duration = Int32.Parse(txt_duration),
+            order = Int32.Parse(txt_order),
+            text = txt_text,
+            type = txt_type,
+            uri = txt_uri
+        };
+        sign = await JSRuntime.InvokeAsync<DigiSign>("realmShim_Function", "setNewSign", sign);
+            
+        NavigationManager.NavigateTo("/Home");
+    }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        string txt_name, txt_feed, txt_type, txt_order, txt_duration, txt_uri, txt_text = "";
+        txt_order = "999";
+        txt_duration = "5";
+        
+        try
+        {
+            user = await JSRuntime.InvokeAsync<RealmUser>("getUserDetails");
+            
+        } catch(Exception ex) {
+            Console.WriteLine(ex);
+        }
+    }
+}

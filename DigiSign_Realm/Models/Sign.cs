@@ -35,6 +35,8 @@ namespace DigiSign_Realm.Models
 
         [MapTo("uri")]
         public string URI { get; set; }
+        [MapTo("format")]
+        public string TextFormat { get; set; }
 
     }
 }
