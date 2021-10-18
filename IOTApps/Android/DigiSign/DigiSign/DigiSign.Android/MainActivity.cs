@@ -8,6 +8,9 @@ using Android.OS;
 namespace DigiSign.Droid
 {
     [Activity(Label = "DigiSign", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize )]
+    [IntentFilter(new[] { "android.intent.action.MAIN" },
+       AutoVerify = true,
+       Categories = new[] { "android.intent.category.LEANBACK_LAUNCHER" })]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         protected override void OnCreate(Bundle savedInstanceState)
