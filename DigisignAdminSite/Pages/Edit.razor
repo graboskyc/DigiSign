@@ -52,9 +52,9 @@
         </div>
         <div class="modal-body">
             @if(txt_type == "image") {
-                <img src=@txt_uri height="480" />
+                <img src=@txt_uri height="480" style="border-style: solid;" />
             } else if((txt_type == "base64image") || (txt_type == "base64")) {
-                <img src="data:image/jpg;base64, @txt_text" height="480" />
+                <img src="data:image/jpg;base64, @txt_text" height="480" style="border-style: solid;" />
             } else if(txt_type == "video") {
                 <video height="480" controls>
                     <source src=@txt_uri />
