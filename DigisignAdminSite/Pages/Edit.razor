@@ -118,6 +118,8 @@
     private async Task RunDelete() {
         string[] args = {ID};
         await JSRuntime.InvokeVoidAsync("realmShim_Function", "deleteSign", args);
+        ms.LastEditID = DateTime.Now.ToLongTimeString();
+        StateHasChanged();
         NavigationManager.NavigateTo("/Home");
     }
 
