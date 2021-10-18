@@ -24,14 +24,14 @@ Supported options for the type of screen are:
 * Create a user manually (email/password) and you will need this later
 
 ## IOT App
-## Windows
+### Windows
 * Deploy a Raspberry Pi with Windows 10 IOT
 * Connect it to the network
  Download Visual Studio 2019, open the solution in `Digisign_Realm/IOTApps/UWP`
 * Copy the `Resources.resw.sample` into `Resources.resw` and enter the Realm App ID and the API key you generated above
 * Deploy the app onto the Pi
 
-## Android TV
+### Android TV
 * Deploy an Android TV (such as an nVIDIA Shield)
 * Connect it to the network
 * Turn on developer mode by going into Settings > About and clicking on the Build Info until it says Developer Mode is enabled
