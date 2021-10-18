@@ -155,6 +155,18 @@ namespace DigiSign_Realm
                 if (_currentIndex == allSigns.Count())
                 {
                     _currentIndex = 0;
+                    try
+                    {
+                        var bsonval = await user.Functions.CallAsync("getMyPartitions", txt_deviceID.Text, txt_ipaddr.Text);
+                        var rps = bsonval.ToString();
+                        if (rps.Length > 0)
+                        {
+                            _realmPartition = rps;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                    }
                 }
 
                 var partitions = _realmPartition.Split(",").ToList();
