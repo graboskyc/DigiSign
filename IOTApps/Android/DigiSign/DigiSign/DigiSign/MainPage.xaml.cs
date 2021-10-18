@@ -72,13 +72,16 @@ namespace DigiSign
 
                 await realm.GetSession().WaitForDownloadAsync();
 
-                allSigns = realm.All<Models.Sign>();
+                allSigns = realm.All<Models.Sign>().OrderBy(sign => sign.Order);
 
                 var token = realm.All<Models.Sign>().SubscribeForNotifications((sender, changes, error) =>
                 {
                     allSigns.OrderBy(sign => sign.Order);
-                    DisplayNext();
+                    _currentIndex = 0;
+                    //DisplayNext();
                 });
+
+                DisplayNext();
             }
         }
 
@@ -141,15 +144,13 @@ namespace DigiSign
                     {
                         ctr_view_media.IsVisible = true;
                         ctr_view_media.Source = new Uri(s.URI);
-                        //await CrossMediaManager.Current.Play(s.URI);
-                        //CrossMediaManager.Current.Play(s.URI, MediaFileType.Video);
                     }
                     else if (s.Type == "image")
                     {
                         ctr_view_image.IsVisible = true;
                         ctr_view_image.Source = new Uri(s.URI);
                     }
-                    else if (s.Type == "base64image")
+                    else if ((s.Type == "base64image") || (s.Type == "base64"))
                     {
                         ctr_view_image.IsVisible = true;
 

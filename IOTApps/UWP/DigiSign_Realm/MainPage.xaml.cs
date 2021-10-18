@@ -110,13 +110,15 @@ namespace DigiSign_Realm
 
                 await realm.GetSession().WaitForDownloadAsync();
 
-                allSigns = realm.All<Models.Sign>();
+                allSigns = realm.All<Models.Sign>().OrderBy(sign => sign.Order);
 
                 var token = realm.All<Models.Sign>().SubscribeForNotifications((sender, changes, error) =>
                 {
                     allSigns.OrderBy(sign => sign.Order);
-                    DisplayNext();
+                    _currentIndex = 0;
                 });
+
+                DisplayNext();
             }
         }
 
@@ -172,12 +174,14 @@ namespace DigiSign_Realm
                 else
                 {
                     ctr_configstack.Visibility = Visibility.Collapsed;
+                    ctr_view_web.Visibility = Visibility.Collapsed;
+                    ctr_view_image.Visibility = Visibility.Collapsed;
+                    ctr_view_text.Visibility = Visibility.Collapsed;
+                    ctr_view_media.Visibility = Visibility.Collapsed;
+
                     if (s.Type == "web")
                     {
                         ctr_view_web.Visibility = Visibility.Visible;
-                        ctr_view_image.Visibility = Visibility.Collapsed;
-                        ctr_view_text.Visibility = Visibility.Collapsed;
-                        ctr_view_media.Visibility = Visibility.Collapsed;
 
                         ctr_view_web.Visibility = Visibility.Visible;
                         ctr_view_web.Navigate(new Uri(s.URI));
@@ -185,9 +189,6 @@ namespace DigiSign_Realm
                     }
                     if (s.Type == "video")
                     {
-                        ctr_view_web.Visibility = Visibility.Collapsed;
-                        ctr_view_image.Visibility = Visibility.Collapsed;
-                        ctr_view_text.Visibility = Visibility.Collapsed;
                         ctr_view_media.Visibility = Visibility.Visible;
 
                         ctr_view_media.Source = new Uri(s.URI);
@@ -196,20 +197,14 @@ namespace DigiSign_Realm
                     else if (s.Type == "image")
                     {
                         ctr_view_image.Visibility = Visibility.Visible;
-                        ctr_view_web.Visibility = Visibility.Collapsed;
-                        ctr_view_text.Visibility = Visibility.Collapsed;
-                        ctr_view_media.Visibility = Visibility.Collapsed;
-
+                        
                         BitmapImage imageSource = new BitmapImage(new Uri(s.URI));
                         ctr_view_image.Width = imageSource.DecodePixelHeight = (int)this.ActualWidth;
                         ctr_view_image.Source = imageSource;
                     }
-                    else if (s.Type == "base64image")
+                    else if ((s.Type == "base64image") || (s.Type == "base64"))
                     {
                         ctr_view_image.Visibility = Visibility.Visible;
-                        ctr_view_web.Visibility = Visibility.Collapsed;
-                        ctr_view_text.Visibility = Visibility.Collapsed;
-                        ctr_view_media.Visibility = Visibility.Collapsed;
 
                         var ims = new InMemoryRandomAccessStream();
                         var bytes = Convert.FromBase64String(s.Text);
@@ -226,9 +221,6 @@ namespace DigiSign_Realm
                     else if (s.Type == "text")
                     {
                         ctr_view_text.Visibility = Visibility.Visible;
-                        ctr_view_web.Visibility = Visibility.Collapsed;
-                        ctr_view_image.Visibility = Visibility.Collapsed;
-                        ctr_view_media.Visibility = Visibility.Collapsed;
 
                         ctr_view_text.Document.SetText(Windows.UI.Text.TextSetOptions.None, s.Text);
                     }
