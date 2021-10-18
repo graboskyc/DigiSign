@@ -2,7 +2,7 @@
  
 A simple digital signage solution meant to run on Windows 10 IOT Core using UWP and C# as well as Android TVs using Xamarin and C#.
 
-Signage is stored in [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) and sync'd to the device using [MongoDB Realm](https://www.mongodb.com/realm).
+Signage is stored in [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) and sync'd to the device using [MongoDB Realm](https://www.mongodb.com/realm) and thus is Serverless.
 
 # Sign type support
 
