@@ -32,6 +32,7 @@
 
         @if(!isLoading) {
             <button class="btn btn-g btn-lg" @onclick="RunSave" id="btn_save">Save</button>
+            <button class="btn btn-secondary btn-lg" @onclick="@(e => showModal = true)" style="text-align:center; width:100%; padding:5px; margin-top:10px; margin-bottom:10px;">Preview</button>
             <button class="btn btn-danger btn-lg" @onclick="RunDelete" id="btn_del" style="text-align:center; width:100%; padding:5px; margin-top:10px; margin-bottom:10px;">Delete</button>
         } else {
             <button class="btn btn-g btn-lg" disabled ><span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>Processing...</button>
