@@ -24,7 +24,7 @@
         <label>Duration</label>
         <input type="text" @bind="txt_duration" @bind:event="onchange" class="form-control" />
 
-        <label>URI</label>
+        <label><a @onclick="@(e => showModal = true)">URI <span class="oi oi-magnifying-glass"></span></a></label>
         <input type="text" @bind="txt_uri" @bind:event="onchange" class="form-control" />
 
         <label>Text</label>
@@ -40,6 +40,37 @@
     </div>
 </div>
 
+@if(showModal) {
+    <div class="modal fade show d-block" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Preview</h5>
+            <button type="button" class="close" @onclick="@(e => showModal = false)">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            @if(txt_type == "image") {
+                <img src=@txt_uri height="480" />
+            } else if((txt_type == "base64image") || (txt_type == "base64")) {
+                <img src="data:image/jpg;base64, @txt_text" height="480" />
+            } else if(txt_type == "video") {
+                <video height="480" controls>
+                    <source src=@txt_uri />
+                </video>
+            } else {
+                <p><i>Cannot preview</i></p>
+            }
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" @onclick="@(e => showModal = false)">Close</button>
+        </div>
+        </div>
+    </div>
+    </div>
+}
+
 
 @code {
     [Parameter]
@@ -49,6 +80,7 @@
     private DigiSign sign = null;
     private string txt_name, txt_feed, txt_type, txt_order, txt_duration, txt_uri, txt_text = "";
     private bool isLoading = false;
+    private bool showModal = false;
 
     private async Task GetSign() {        
         string[] args = {ID};
