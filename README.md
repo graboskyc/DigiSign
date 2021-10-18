@@ -41,7 +41,7 @@ Supported options for the type of screen are:
 * Copy the `Resources.resw.sample` into `Resources.resw` and enter the Realm App ID and the API key you generated above
 * Deploy the app onto the TV
 
-## Common
+### Common
 * The app will wait on the registration page seen below in the screenshot
 * Once you have content in your `Signs` collection, continue on
 * The device will have booted and you should see a record in the  `Registration` collection
