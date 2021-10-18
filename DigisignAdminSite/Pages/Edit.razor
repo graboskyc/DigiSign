@@ -1,6 +1,7 @@
 @page "/Edit/{ID}"
 @inject IJSRuntime JSRuntime; 
 @inject NavigationManager NavigationManager;
+@inject MenuService ms;
 
 <h1>Edit a Sign</h1>
 
@@ -106,7 +107,12 @@
             uri = txt_uri,
             _id = ID
         };
+
         sign = await JSRuntime.InvokeAsync<DigiSign>("realmShim_Function", "setSign", sign);
+
+        ms.LastEditID = DateTime.Now.ToLongTimeString();
+        StateHasChanged();
+        //await NavMenu.GetSigns();
     }
 
     private async Task RunDelete() {

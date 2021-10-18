@@ -1,5 +1,6 @@
 ﻿@inject NavigationManager NavigationManager
 @inject IJSRuntime JSRuntime;
+@inject MenuService ms;
 
 <div class="top-row pl-4 navbar navbar-dark">
     <a class="navbar-brand" href="">DigiSign Admin</a>
@@ -36,12 +37,14 @@
 
     <div style="position:absolute;bottom:20px;width:100%;text-align:center;">
         <button @onclick="GetSigns" class="btn btn-lg btn-trans">
-            <span class="oi oi-reload" aria-hidden="true"></span>
+            <span class="oi oi-reload" aria-hidden="true"></span> @ms.LastEditID
         </button>
     </div>
 </div>
 
 @code {
+    private string _lasteditscreen;
+
     private bool collapseNavMenu = true;
 
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
@@ -50,9 +53,15 @@
 
     private List<DigiSign> signs = null;
 
-    private async Task GetSigns() {        
+    public async Task GetSigns() {        
         string[] args = {};
         signs = await JSRuntime.InvokeAsync<List<DigiSign>>("realmShim_Function", "getSignList", args);
+        StateHasChanged(); 
+    }
+
+    private async void MenuChanged(EventArgs e)
+    {
+        await GetSigns();
     }
 
     protected override async Task OnInitializedAsync()
@@ -64,6 +73,7 @@
         } catch(Exception ex) {
             Console.WriteLine(ex);
         }
+        ms.OnChange += ()  => {StateHasChanged(); GetSigns();  };
     }
 
     private void ToggleNavMenu()
