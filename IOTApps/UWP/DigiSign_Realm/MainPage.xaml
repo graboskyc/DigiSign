@@ -15,15 +15,33 @@
             <TextBlock Foreground="White" Margin="100,20,0,0" FontSize="30">Waiting for feed...</TextBlock>
             <ProgressBar x:Name="progressBar1" IsIndeterminate="True" Height="50" Margin="100,10,100,0" Foreground="#FF60A917"/>
 
-            <TextBlock Foreground="White" Margin="100,20,0,0" FontSize="30">Device ID:</TextBlock>
-            <TextBox Name="txt_deviceID" Text="" Foreground="White" Margin="100,10,100,0"></TextBox>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="7*" />
+                    <ColumnDefinition Width="3*" />
+                </Grid.ColumnDefinitions>
 
-            <TextBlock Foreground="White" Margin="100,20,0,0" FontSize="30">LAN IP:</TextBlock>
-            <TextBox Name="txt_ipaddr" Text="" Foreground="White" Margin="100,10,100,0"></TextBox>
+                <StackPanel Orientation="Vertical" Grid.Column="0">
+                    <TextBlock Foreground="White" Margin="100,20,0,0" FontSize="30">Device ID:</TextBlock>
+                    <TextBox Name="txt_deviceID" Text="" Foreground="White" Margin="100,10,100,0"></TextBox>
 
-            <TextBlock Foreground="White" Margin="100,20,0,0" FontSize="30">Errors:</TextBlock>
-            <TextBox Name="txt_error" Text="" Foreground="White" Margin="100,10,100,0"></TextBox>
+                    <TextBlock Foreground="White" Margin="100,20,0,0" FontSize="30">Connection:</TextBlock>
+                    <TextBox Name="txt_connection" Text="" Foreground="White" Margin="100,10,100,0"></TextBox>
+
+                    <TextBlock Foreground="White" Margin="100,20,0,0" FontSize="30">LAN IP:</TextBlock>
+                    <TextBox Name="txt_ipaddr" Text="" Foreground="White" Margin="100,10,100,0"></TextBox>
+
+                    <TextBlock Foreground="White" Margin="100,20,0,0" FontSize="30">Errors:</TextBlock>
+                    <TextBox Name="txt_error" Text="" Foreground="White" Margin="100,10,100,0"></TextBox>
+                </StackPanel>
+
+                <StackPanel Orientation="Vertical" Grid.Column="1">
+                    <Image x:Name="img_qr" />
+                </StackPanel>
+            </Grid>
         </StackPanel>
+        
+        
         <Image x:Name="ctr_view_image" Visibility="Collapsed" ImageFailed="ctr_view_image_ImageFailed" />
         <WebView x:Name="ctr_view_web" Visibility="Collapsed" NavigationFailed="ctr_view_web_NavigationFailed"/>
         <RichEditBox Name="ctr_view_text" FontSize="100" Foreground="White" TextAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed"></RichEditBox>

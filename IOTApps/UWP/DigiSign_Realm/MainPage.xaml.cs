@@ -32,6 +32,7 @@ namespace DigiSign_Realm
         string _realmAppID = "";
         string _realmAPIKey = "";
         string _realmPartition = "";
+        string _RealmHostingUrl = "";
 
         public Realms.Sync.App app { get; set; }
         public Realms.Sync.User user { get; set; }
@@ -58,7 +59,12 @@ namespace DigiSign_Realm
             var resources = new ResourceLoader("Resources");
             _realmAppID = resources.GetString("AutoProvsionRealmAppID");
             _realmAPIKey = resources.GetString("AutoProvisionRealmAPIKey");
-            //_realmPartition = resources.GetString("AutoProvisionRealmParition");
+            _RealmHostingUrl = resources.GetString("RealmHostingUrl");
+            txt_connection.Text = "..." + _realmAPIKey.Substring(_realmAPIKey.Length - 5) + " @ " + _realmAppID;
+
+            string qruri = "https://chart.googleapis.com/chart?cht=qr&chs=300x300&chl=" + Uri.EscapeDataString(_RealmHostingUrl);
+            BitmapImage imageSource = new BitmapImage(new Uri(qruri));
+            img_qr.Source = imageSource;
 
             _disTimer = new DispatcherTimer();
             _disTimer.Tick += _disTimer_Tick;

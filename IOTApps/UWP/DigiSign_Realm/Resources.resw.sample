@@ -123,4 +123,7 @@
   <data name="AutoProvsionRealmAppID" xml:space="preserve">
     <value></value>
   </data>
+  <data name="RealmHostingUrl" xml:space="preserve">
+    <value>https://hostingurl.mongodbstitch.com</value>
+  </data>
 </root>

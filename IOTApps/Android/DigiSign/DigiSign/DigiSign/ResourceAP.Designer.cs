@@ -86,5 +86,14 @@ namespace DigiSign {
                 return ResourceManager.GetString("AutoProvsionRealmAppID", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://digisign-realm-zxtsu-brigk.mongodbstitch.com/.
+        /// </summary>
+        public static string RealmHostingUrl {
+            get {
+                return ResourceManager.GetString("RealmHostingUrl", resourceCulture);
+            }
+        }
     }
 }
