@@ -7,6 +7,10 @@ exports = async function(obj){
   var id = BSON.ObjectId(obj._id);
   delete obj._id;
   delete obj.deviceId;
+  delete obj.ipaddr;
+  delete obj.updated;
+  delete obj.lastSeen;
+  delete obj.firstSeen;
   obj.updated = now;
   
   await conn.updateOne({_id:id}, {$set:obj})

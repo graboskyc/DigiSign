@@ -1,4 +1,4 @@
-exports = async function(deviceID){
+exports = async function(deviceID, ip){
   retval = "";
   var now = new Date();
   
@@ -9,10 +9,10 @@ exports = async function(deviceID){
   if(doc) {
     if(doc.hasOwnProperty("feed")) {
       retval = doc.feed;
-      await conn.updateOne({deviceId:deviceID}, {$set:{lastSeen:now}});
+      await conn.updateOne({deviceId:deviceID}, {$set:{lastSeen:now, ipaddr:ip}});
     }
   } else {
-    await conn.insertOne({deviceId:deviceID, firstSeen:now, lastSeen:now});
+    await conn.insertOne({deviceId:deviceID, firstSeen:now, lastSeen:now, ipaddr:ip});
   }
   
   return retval;

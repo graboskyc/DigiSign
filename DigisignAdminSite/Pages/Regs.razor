@@ -8,6 +8,8 @@
         <tr>
             <th>_ID Ending</th>
             <th>Device ID</th>
+            <th>Alias</th>
+            <th>Last Seen</th>
             <th>IP Address</th>
             <th>Feeds</th>
             <th>Link</th>
@@ -20,6 +22,8 @@
                 <tr>
                     <td>@r._id.Substring(@r._id.Length - 5)</td>
                     <td>@r.deviceId</td>
+                    <td>@r.alias</td>
+                    <td>@r.lastSeen.ToString("G")</td>
                     <td>@r.ipaddr</td>
                     <td>@r.feed</td>
                     <td>

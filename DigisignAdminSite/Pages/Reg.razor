@@ -12,6 +12,9 @@
         <label>Device ID</label>
         <input type="text" @bind="txt_name" @bind:event="onchange" disabled class="form-control" />
 
+        <label>Alias</label>
+        <input type="text" @bind="txt_alias" @bind:event="onchange" class="form-control" />
+
         <label>IP Address</label>
         <input type="text" @bind="txt_ipaddr" @bind:event="onchange" disabled class="form-control" />
 
@@ -20,6 +23,7 @@
 
         @if(!isLoading) {
             <button class="btn btn-g btn-lg" @onclick="RunSave" id="btn_save">Save</button>
+            <button class="btn btn-danger btn-lg" @onclick="RunRemoveFeeds" id="btn_del" style="text-align:center; width:100%; padding:5px; margin-top:10px; margin-bottom:10px;">Remove Feeds</button>
             <button class="btn btn-danger btn-lg" @onclick="RunDelete" id="btn_del" style="text-align:center; width:100%; padding:5px; margin-top:10px; margin-bottom:10px;">Delete</button>
         } else {
             <button class="btn btn-g btn-lg" disabled ><span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>Processing...</button>
@@ -35,7 +39,7 @@
 
     private RealmUser user = new RealmUser{};
     private Registration R = null;
-    private string txt_name, txt_feed, txt_ipaddr = "";
+    private string txt_name, txt_feed, txt_ipaddr, txt_alias = "";
     private bool isLoading = false;
 
     private async Task GetReg() {        
@@ -44,6 +48,7 @@
         txt_name = R.deviceId;
         txt_feed = R.feed;
         txt_ipaddr = R.ipaddr;
+        txt_alias = R.alias;
     }
 
     private async Task RunSave() {
@@ -51,9 +56,16 @@
             deviceId = txt_name,
             feed = txt_feed,
             ipaddr = txt_ipaddr,
+            alias = txt_alias,
             _id = ID
         };
         R = await JSRuntime.InvokeAsync<Registration>("realmShim_Function", "setReg", R);
+        NavigationManager.NavigateTo("/Regs");
+    }
+
+    private async Task RunRemoveFeeds() {
+        string[] args = {ID};
+        await JSRuntime.InvokeVoidAsync("realmShim_Function", "deleteRegFeeds", args);
         NavigationManager.NavigateTo("/Regs");
     }
 
@@ -71,7 +83,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        string txt_name, txt_feed, txt_ipaddr = "";
+        string txt_name, txt_feed, txt_ipaddr, txt_alias = "";
         
         try
         {
