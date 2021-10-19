@@ -61,6 +61,12 @@
                 <video height="480" controls>
                     <source src=@txt_uri />
                 </video>
+            } else if(txt_type == "hide") {
+                <p><i>this content is hidden and passed over</i></p>
+            } else if(txt_type == "text") {
+                <pre>
+                    @txt_text
+                </pre>
             } else {
                 <p><i>Cannot preview</i></p>
             }
