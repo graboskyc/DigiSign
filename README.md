@@ -1,8 +1,8 @@
 # DigiSign_Realm
  
-A simple digital signage solution meant to run on Windows 10 IOT Core using WPF and C#. 
+A simple digital signage solution meant to run on Windows 10 IOT Core using UWP and C# as well as Android TVs using Xamarin and C#.
 
-Signage is stored in [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) and sync'd to the device using [MongoDB Realm](https://www.mongodb.com/realm).
+Signage is stored in [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) and sync'd to the device using [MongoDB Realm](https://www.mongodb.com/realm) and thus is Serverless.
 
 # Sign type support
 
@@ -24,17 +24,31 @@ Supported options for the type of screen are:
 * Create a user manually (email/password) and you will need this later
 
 ## IOT App
+### Windows
 * Deploy a Raspberry Pi with Windows 10 IOT
 * Connect it to the network
- Download Visual Studio 2019, open the solution in `Digisign_Realm`
+ Download Visual Studio 2019, open the solution in `Digisign_Realm/IOTApps/UWP`
 * Copy the `Resources.resw.sample` into `Resources.resw` and enter the Realm App ID and the API key you generated above
 * Deploy the app onto the Pi
-* It will wait on the registration page seen above in the screenshot
+
+### Android TV
+* Deploy an Android TV (such as an nVIDIA Shield)
+* Connect it to the network
+* Turn on developer mode by going into Settings > About and clicking on the Build Info until it says Developer Mode is enabled
+* Enable USB or Network debugging
+* Download Visual Studio 2019, open the solution in `Digisign_Realm/IOTApps/Android`
+* Connect via USB and trust it. Or if using network, in Visual Studio press the console button at the top to open the ADB tools and run `adb connect <ipaddrofdevice>:5555` and trust it.
+* Copy the `Resources.resw.sample` into `Resources.resw` and enter the Realm App ID and the API key you generated above
+* Deploy the app onto the TV
+
+### Common
+* The app will wait on the registration page seen below in the screenshot
 * Once you have content in your `Signs` collection, continue on
 * The device will have booted and you should see a record in the  `Registration` collection
 * Edit the record to have the `feed` field and the attribute a comma-delimited string of feeds such as `ALL,menus` to get feeds for `ALL` and `menus`
-* Every 15 seconds or so the Pi will update to check if it is registered and start the slideshow
+* Every 15 seconds or so the app will update to check if it is registered and start the slideshow
 * Add to the `Signs` collection with the screens needed to rotate
+* At the end of the full sign rotation, it will attempt to check if the feeds the device is subscribed to have changed
 
 ## Realm Admin Pages
 * Make sure Realm web hosting is enabled
@@ -42,7 +56,7 @@ Supported options for the type of screen are:
 * Using the dotnet CLI within the `DigisignAdminSite` directory run `dotnet publish -c Release`
 * Upload the contents of the `DigisignAdminSite\bin\Release\net5.0\publish\wwwroot` directory into Realm Hosting
 * Within hosting settings, make sure you enable "single page app" and point it to `index.html`
-* You can now edit pages here to change what shows up on the signs
+* You can now edit pages here to change what shows up on the signs and modify registrations
 
 # Registration Pending UI
 ![](Screenshots/ss01.png)
