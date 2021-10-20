@@ -11,51 +11,81 @@
     {
         "name": "getSignList",
         "private": false,
-        "run_as_system": true
+        "run_as_system": true,
+        "can_evaluate": {
+            "%%user.type": "normal"
+        }
     },
     {
         "name": "getSign",
         "private": false,
-        "run_as_system": true
+        "run_as_system": true,
+        "can_evaluate": {
+            "%%user.type": "normal"
+        }
     },
     {
         "name": "setSign",
         "private": false,
-        "run_as_system": true
+        "run_as_system": true,
+        "can_evaluate": {
+            "%%user.type": "normal"
+        }
     },
     {
         "name": "deleteSign",
         "private": false,
-        "run_as_system": true
+        "run_as_system": true,
+        "can_evaluate": {
+            "%%user.type": "normal"
+        }
     },
     {
         "name": "setNewSign",
         "private": false,
-        "run_as_system": true
+        "run_as_system": true,
+        "can_evaluate": {
+            "%%user.type": "normal"
+        }
     },
     {
         "name": "getRegsList",
         "private": false,
-        "run_as_system": true
+        "run_as_system": true,
+        "can_evaluate": {
+            "%%user.type": "normal"
+        }
     },
     {
         "name": "getReg",
         "private": false,
-        "run_as_system": true
+        "run_as_system": true,
+        "can_evaluate": {
+            "%%user.type": "normal"
+        }
     },
     {
         "name": "setReg",
         "private": false,
-        "run_as_system": true
+        "run_as_system": true,
+        "can_evaluate": {
+            "%%user.type": "normal"
+        }
     },
     {
         "name": "deleteReg",
         "private": false,
-        "run_as_system": true
+        "run_as_system": true,
+        "can_evaluate": {
+            "%%user.type": "normal"
+        }
     },
     {
         "name": "deleteRegFeeds",
         "private": false,
-        "run_as_system": true
+        "run_as_system": true,
+        "can_evaluate": {
+            "%%user.type": "normal"
+        }
     }
 ]
