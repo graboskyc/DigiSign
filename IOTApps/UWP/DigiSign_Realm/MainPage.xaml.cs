@@ -16,6 +16,7 @@ using Windows.Networking;
 using Windows.Networking.Connectivity;
 using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media;
+using System.Collections.ObjectModel;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -40,8 +41,9 @@ namespace DigiSign_Realm
         public Realm realm { get; set; }
         public string partition { get; set; }
         private IQueryable<Models.Sign> allSigns = null;
-        private List<Models.Sign> allSignsList = null;
-        private List<IDisposable> _tokens = null;
+        private ObservableCollection<Models.Sponsor> sponsorsToDisplay = null;
+
+
 
         public MainPage()
         {
@@ -68,7 +70,6 @@ namespace DigiSign_Realm
 
             _disTimer = new DispatcherTimer();
             _disTimer.Tick += _disTimer_Tick;
-
             EnableSync();
         }
 
@@ -112,9 +113,17 @@ namespace DigiSign_Realm
 
                 // get actual signs
                 config = new Realms.Sync.SyncConfiguration("GLOBAL", user);
-                realm = await Realm.GetInstanceAsync(config);
 
-                await realm.GetSession().WaitForDownloadAsync();
+                try
+                {
+                    realm = await Realm.GetInstanceAsync(config);
+
+                    await realm.GetSession().WaitForDownloadAsync();
+                } catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                    txt_error.Text = ex.ToString();
+                }
 
                 allSigns = realm.All<Models.Sign>().OrderBy(sign => sign.Order);
 
@@ -125,12 +134,32 @@ namespace DigiSign_Realm
                 });
 
                 DisplayNext();
+                //DisplaySponsors();
             }
         }
 
         private void _disTimer_Tick(object sender, object e)
         {
             DisplayNext();
+        }
+
+        async void DisplaySponsors()
+        {
+            ctr_configstack.Visibility = Visibility.Collapsed;
+            ctr_view_image.Visibility = Visibility.Collapsed;
+            ctr_view_media.Visibility = Visibility.Collapsed;
+            ctr_view_text.Visibility = Visibility.Collapsed;
+            ctr_view_web.Visibility = Visibility.Collapsed;
+            ctr_sponsors.Visibility = Visibility.Visible;
+
+            // get six random sponsors
+            var allSponsors = realm.All<Models.Sponsor>().ToList();
+            sponsorsToDisplay = new ObservableCollection<Models.Sponsor>(allSponsors.OrderBy(s => Guid.NewGuid()).Take(10).ToList());
+            lv_sponsor.ItemsSource = sponsorsToDisplay;
+            lv_sponsor.UpdateLayout();
+
+            _currentIndex = 0;
+            //DisplayNext();
         }
 
         async void DisplayNext()
@@ -143,6 +172,7 @@ namespace DigiSign_Realm
                 ctr_view_media.Visibility = Visibility.Collapsed;
                 ctr_view_text.Visibility = Visibility.Collapsed;
                 ctr_view_web.Visibility = Visibility.Collapsed;
+                ctr_sponsors.Visibility = Visibility.Collapsed;
 
                 txt_error.Text = "Registration success; screen list is null.";
             }
@@ -153,14 +183,19 @@ namespace DigiSign_Realm
                 ctr_view_media.Visibility = Visibility.Collapsed;
                 ctr_view_text.Visibility = Visibility.Collapsed;
                 ctr_view_web.Visibility = Visibility.Collapsed;
+                ctr_sponsors.Visibility = Visibility.Collapsed;
 
                 txt_error.Text = "Registration success; screen count is " + allSigns.Count().ToString();
             }
             else
-            { 
+            {
+                var partitions = _realmPartition.Split(",").ToList();
+
                 if (_currentIndex == allSigns.Count())
                 {
+                    // we looped all the way around so reset
                     _currentIndex = 0;
+                    // see if our partitions changed
                     try
                     {
                         var bsonval = await user.Functions.CallAsync("getMyPartitions", txt_deviceID.Text, txt_ipaddr.Text);
@@ -168,14 +203,28 @@ namespace DigiSign_Realm
                         if (rps.Length > 0)
                         {
                             _realmPartition = rps;
+                            partitions = _realmPartition.Split(",").ToList();
                         }
                     }
                     catch (Exception ex)
                     {
                     }
-                }
 
-                var partitions = _realmPartition.Split(",").ToList();
+                    // only on last cycle run sponsors code
+                    if (partitions.Contains("sponsors"))
+                    {
+                        ctr_configstack.Visibility = Visibility.Collapsed;
+                        ctr_view_image.Visibility = Visibility.Collapsed;
+                        ctr_view_media.Visibility = Visibility.Collapsed;
+                        ctr_view_text.Visibility = Visibility.Collapsed;
+                        ctr_view_web.Visibility = Visibility.Collapsed;
+                        ctr_sponsors.Visibility = Visibility.Visible;
+                        DisplaySponsors();
+                        _currentTimer = 20;
+                        await Task.Delay(TimeSpan.FromSeconds(_currentTimer));
+                        _currentIndex = 0;
+                    }
+                }
 
                 Models.Sign s = allSigns.OrderBy(sign => sign.Order).ElementAt(_currentIndex);
 
@@ -196,6 +245,7 @@ namespace DigiSign_Realm
                     ctr_view_image.Visibility = Visibility.Collapsed;
                     ctr_view_text.Visibility = Visibility.Collapsed;
                     ctr_view_media.Visibility = Visibility.Collapsed;
+                    ctr_sponsors.Visibility = Visibility.Collapsed;
 
                     if (s.Type == "web")
                     {
