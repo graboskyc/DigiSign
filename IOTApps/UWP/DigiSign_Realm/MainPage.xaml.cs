@@ -121,8 +121,8 @@ namespace DigiSign_Realm
                     await realm.GetSession().WaitForDownloadAsync();
                 } catch (Exception ex)
                 {
-                    Console.WriteLine(ex.ToString());
                     txt_error.Text = ex.ToString();
+                    Console.WriteLine(ex.ToString());
                 }
 
                 allSigns = realm.All<Models.Sign>().OrderBy(sign => sign.Order);

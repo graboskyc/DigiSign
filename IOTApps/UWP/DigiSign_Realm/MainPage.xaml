@@ -10,6 +10,8 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid Background="#FF000000" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        
+        <!--BEGIN REG PAGE -->
         <StackPanel Name="ctr_configstack" Orientation="Vertical" VerticalAlignment="Stretch" Visibility="Visible">
             <TextBlock Foreground="White" Margin="50,50,0,0" FontSize="72">DigiSign Registration</TextBlock>
 
@@ -41,7 +43,9 @@
                 </StackPanel>
             </Grid>
         </StackPanel>
+        <!--END REG PAGE -->
 
+        <!--BEGIN SPONSORS PAGE -->
         <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" x:Name="ctr_sponsors" Visibility="Collapsed" Background="Black">
             <TextBlock Foreground="White" FontSize="100" TextAlignment="Center" Margin="10">Thank You To Our Sponsors</TextBlock>
             <Grid x:Name="invisigrid" HorizontalAlignment="Stretch">
@@ -77,11 +81,14 @@
                 </GridView>
             </Grid>
         </StackPanel>
+        <!--END SPONSORS PAGE -->
 
+        <!--BEGIN CONTENT PAGE -->
         <Image x:Name="ctr_view_image" Visibility="Collapsed" ImageFailed="ctr_view_image_ImageFailed" />
         <WebView x:Name="ctr_view_web" Visibility="Collapsed" NavigationFailed="ctr_view_web_NavigationFailed"/>
         <RichEditBox Name="ctr_view_text" FontSize="100" Foreground="White" TextAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed"></RichEditBox>
         <MediaElement x:Name="ctr_view_media" AutoPlay="True" AreTransportControlsEnabled="False" Visibility="Collapsed" IsLooping="True" />
+        <!--END CONTENT PAGE -->
 
 
     </Grid>
