@@ -4,6 +4,7 @@ using System.Text;
 using Realms;
 using MongoDB.Bson;
 
+
 namespace DigiSign_Realm.Models
 {
     class Menu : RealmObject
@@ -15,7 +16,7 @@ namespace DigiSign_Realm.Models
 
         [MapTo("name")]
         [Required]
-        public string Name { get; set; } 
+        public string Name { get; set; }
 
         [MapTo("soldAt")]
         [Required]
@@ -31,6 +32,6 @@ namespace DigiSign_Realm.Models
         [Required]
         public double? PriceCents { get; set; } = 0.0;
 
-
+        public string PriceFormatted {  get { return "$" + (PriceCents / 100).ToString();  } }
     }
 }

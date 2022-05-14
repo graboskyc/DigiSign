@@ -42,6 +42,7 @@ namespace DigiSign_Realm
         public string partition { get; set; }
         private IQueryable<Models.Sign> allSigns = null;
         private ObservableCollection<Models.Sponsor> sponsorsToDisplay = null;
+        private ObservableCollection<Models.Menu> menuToDisplay = null;
 
 
 
@@ -151,6 +152,7 @@ namespace DigiSign_Realm
             ctr_view_text.Visibility = Visibility.Collapsed;
             ctr_view_web.Visibility = Visibility.Collapsed;
             ctr_sponsors.Visibility = Visibility.Visible;
+            ctr_menu.Visibility = Visibility.Collapsed;
 
             // get six random sponsors
             var allSponsors = realm.All<Models.Sponsor>().ToList();
@@ -160,6 +162,61 @@ namespace DigiSign_Realm
 
             _currentIndex = 0;
             //DisplayNext();
+        }
+
+        async void DisplayMenu(string menuID)
+        {
+            ctr_configstack.Visibility = Visibility.Collapsed;
+            ctr_view_image.Visibility = Visibility.Collapsed;
+            ctr_view_media.Visibility = Visibility.Collapsed;
+            ctr_view_text.Visibility = Visibility.Collapsed;
+            ctr_view_web.Visibility = Visibility.Collapsed;
+            ctr_sponsors.Visibility = Visibility.Collapsed;
+            ctr_menu.Visibility = Visibility.Visible;
+
+            var allMenus = realm.All<Models.Menu>().ToList();
+            menuToDisplay = new ObservableCollection<Models.Menu>(allMenus.Where(m => m.SoldAtID == menuID).OrderBy(m => m.Name).ToList());
+            txt_menu_heading.Text = menuToDisplay.FirstOrDefault().SoldAtName;
+            var groupedMenu = menuToDisplay.GroupBy(m => m.CategoryName).ToList();
+
+            foreach (var g in groupedMenu)
+            {
+                if ((g.Key != "Utility") && (g.Key != "DNI") && (g.Key != "Other"))
+                {
+                    var gs = new StackPanel();
+                    var t = new TextBlock();
+                    t.FontSize = 72;
+                    t.TextDecorations = Windows.UI.Text.TextDecorations.Underline;
+                    t.FontWeight = Windows.UI.Text.FontWeights.Bold;
+                    t.Text = g.Key;
+                    gs.Children.Add(t);
+                    foreach (var m in g)
+                    {
+                        var s = new StackPanel();
+                        s.Orientation = Orientation.Horizontal;
+                        s.BorderThickness = new Thickness(5);
+                        s.Margin = new Thickness(50);
+
+                        var n = new TextBlock();
+                        n.Text = m.Name;
+                        n.FontSize = 64;
+                        n.TextAlignment = TextAlignment.Left;
+
+                        var p = new TextBlock();
+                        p.Text = m.PriceFormatted;
+                        p.FontSize = 64;
+                        p.TextAlignment = TextAlignment.Right;
+
+                        s.Children.Add(n);
+                        s.Children.Add(p);
+                        gs.Children.Add(s);
+                    }
+                    sp_menu.Children.Add(gs);
+                }
+            }
+            sp_menu.UpdateLayout();
+
+            _currentIndex = 0;
         }
 
         async void DisplayNext()
@@ -173,6 +230,7 @@ namespace DigiSign_Realm
                 ctr_view_text.Visibility = Visibility.Collapsed;
                 ctr_view_web.Visibility = Visibility.Collapsed;
                 ctr_sponsors.Visibility = Visibility.Collapsed;
+                ctr_menu.Visibility = Visibility.Collapsed;
 
                 txt_error.Text = "Registration success; screen list is null.";
             }
@@ -184,6 +242,7 @@ namespace DigiSign_Realm
                 ctr_view_text.Visibility = Visibility.Collapsed;
                 ctr_view_web.Visibility = Visibility.Collapsed;
                 ctr_sponsors.Visibility = Visibility.Collapsed;
+                ctr_menu.Visibility = Visibility.Collapsed;
 
                 txt_error.Text = "Registration success; screen count is " + allSigns.Count().ToString();
             }
@@ -219,7 +278,35 @@ namespace DigiSign_Realm
                         ctr_view_text.Visibility = Visibility.Collapsed;
                         ctr_view_web.Visibility = Visibility.Collapsed;
                         ctr_sponsors.Visibility = Visibility.Visible;
+                        ctr_menu.Visibility = Visibility.Collapsed;
                         DisplaySponsors();
+                        _currentTimer = 20;
+                        await Task.Delay(TimeSpan.FromSeconds(_currentTimer));
+                        _currentIndex = 0;
+                    }
+
+                    // only on last cycle run menu code
+                    //if (partitions.Contains("menu_"))
+                    if(partitions.Any(p=>p.StartsWith("menu_")))
+                    {
+                        ctr_configstack.Visibility = Visibility.Collapsed;
+                        ctr_view_image.Visibility = Visibility.Collapsed;
+                        ctr_view_media.Visibility = Visibility.Collapsed;
+                        ctr_view_text.Visibility = Visibility.Collapsed;
+                        ctr_view_web.Visibility = Visibility.Collapsed;
+                        ctr_sponsors.Visibility = Visibility.Collapsed;
+                        ctr_menu.Visibility = Visibility.Visible;
+
+                        string menuID = "";
+                        foreach(string p in partitions)
+                        {
+                            if(p.StartsWith("menu_"))
+                            {
+                                menuID = p.Split("_")[1];
+                            }
+                        }
+
+                        DisplayMenu(menuID);
                         _currentTimer = 20;
                         await Task.Delay(TimeSpan.FromSeconds(_currentTimer));
                         _currentIndex = 0;
