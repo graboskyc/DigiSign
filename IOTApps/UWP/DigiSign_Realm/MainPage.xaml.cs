@@ -34,6 +34,7 @@ namespace DigiSign_Realm
         string _realmAPIKey = "";
         string _realmPartition = "";
         string _RealmHostingUrl = "";
+        string _WebsiteHomepage = "";
 
         public Realms.Sync.App app { get; set; }
         public Realms.Sync.User user { get; set; }
@@ -63,6 +64,7 @@ namespace DigiSign_Realm
             _realmAppID = resources.GetString("AutoProvsionRealmAppID");
             _realmAPIKey = resources.GetString("AutoProvisionRealmAPIKey");
             _RealmHostingUrl = resources.GetString("RealmHostingUrl");
+            _WebsiteHomepage = resources.GetString("WebsiteHomepage");
             txt_connection.Text = "..." + _realmAPIKey.Substring(_realmAPIKey.Length - 5) + " @ " + _realmAppID;
 
             string qruri = "https://chart.googleapis.com/chart?cht=qr&chs=300x300&chl=" + Uri.EscapeDataString(_RealmHostingUrl);
@@ -164,7 +166,7 @@ namespace DigiSign_Realm
             //DisplayNext();
         }
 
-        async void DisplayMenu(string menuID)
+        async Task DisplayMenu(string menuID)
         {
             ctr_configstack.Visibility = Visibility.Collapsed;
             ctr_view_image.Visibility = Visibility.Collapsed;
@@ -174,47 +176,48 @@ namespace DigiSign_Realm
             ctr_sponsors.Visibility = Visibility.Collapsed;
             ctr_menu.Visibility = Visibility.Visible;
 
+            string qruri = "https://chart.googleapis.com/chart?cht=qr&chs=300x300&chl=" + Uri.EscapeDataString(_WebsiteHomepage + "/" + menuID.ToLower());
+            BitmapImage imageSource = new BitmapImage(new Uri(qruri));
+            img_menu_qr.Source = imageSource;
+
             var allMenus = realm.All<Models.Menu>().ToList();
             menuToDisplay = new ObservableCollection<Models.Menu>(allMenus.Where(m => m.SoldAtID == menuID).OrderBy(m => m.Name).ToList());
             txt_menu_heading.Text = menuToDisplay.FirstOrDefault().SoldAtName;
             var groupedMenu = menuToDisplay.GroupBy(m => m.CategoryName).ToList();
 
+            sp_menu.Children.Clear();
+
+
             foreach (var g in groupedMenu)
             {
                 if ((g.Key != "Utility") && (g.Key != "DNI") && (g.Key != "Other"))
                 {
+                    sp_menu.Children.Clear();
+
                     var gs = new StackPanel();
-                    var t = new TextBlock();
-                    t.FontSize = 72;
-                    t.TextDecorations = Windows.UI.Text.TextDecorations.Underline;
-                    t.FontWeight = Windows.UI.Text.FontWeights.Bold;
-                    t.Text = g.Key;
+
+                    var t = new RichEditBox();
+                    t.Background = new SolidColorBrush(Colors.Gray);
+                    t.Document.SetText(Windows.UI.Text.TextSetOptions.None, g.Key);
+                    t.FontSize = 96;
+                    t.TextAlignment = TextAlignment.Center;
                     gs.Children.Add(t);
+
                     foreach (var m in g)
                     {
-                        var s = new StackPanel();
-                        s.Orientation = Orientation.Horizontal;
-                        s.BorderThickness = new Thickness(5);
-                        s.Margin = new Thickness(50);
-
                         var n = new TextBlock();
-                        n.Text = m.Name;
-                        n.FontSize = 64;
-                        n.TextAlignment = TextAlignment.Left;
+                        n.Text = m.Name + " - " + m.PriceFormatted;
+                        n.FontSize = 72;
+                        n.TextAlignment = TextAlignment.Center;
 
-                        var p = new TextBlock();
-                        p.Text = m.PriceFormatted;
-                        p.FontSize = 64;
-                        p.TextAlignment = TextAlignment.Right;
-
-                        s.Children.Add(n);
-                        s.Children.Add(p);
-                        gs.Children.Add(s);
+                        gs.Children.Add(n);
                     }
                     sp_menu.Children.Add(gs);
+                    sp_menu.UpdateLayout();
+                    _currentTimer = 5;
+                    await Task.Delay(TimeSpan.FromSeconds(_currentTimer));
                 }
             }
-            sp_menu.UpdateLayout();
 
             _currentIndex = 0;
         }
@@ -306,9 +309,7 @@ namespace DigiSign_Realm
                             }
                         }
 
-                        DisplayMenu(menuID);
-                        _currentTimer = 20;
-                        await Task.Delay(TimeSpan.FromSeconds(_currentTimer));
+                        await DisplayMenu(menuID);
                         _currentIndex = 0;
                     }
                 }
@@ -333,6 +334,7 @@ namespace DigiSign_Realm
                     ctr_view_text.Visibility = Visibility.Collapsed;
                     ctr_view_media.Visibility = Visibility.Collapsed;
                     ctr_sponsors.Visibility = Visibility.Collapsed;
+                    ctr_menu.Visibility = Visibility.Collapsed;
 
                     if (s.Type == "web")
                     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Realms;
 using MongoDB.Bson;
-
+using System.Globalization;
 
 namespace DigiSign_Realm.Models
 {
@@ -32,6 +32,11 @@ namespace DigiSign_Realm.Models
         [Required]
         public double? PriceCents { get; set; } = 0.0;
 
-        public string PriceFormatted {  get { return "$" + (PriceCents / 100).ToString();  } }
+        public string PriceFormatted {  get {
+                string specifier = "C";
+                CultureInfo culture = CultureInfo.CreateSpecificCulture("en-US");
+                double p = PriceCents ?? 0.0;
+                return (p / 100).ToString(specifier, culture);  
+            } }
     }
 }

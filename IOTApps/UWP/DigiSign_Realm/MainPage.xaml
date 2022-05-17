@@ -9,8 +9,8 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid Background="#FF000000" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-        
+    <Grid Background="#FF000000">
+
         <!--BEGIN REG PAGE -->
         <StackPanel Name="ctr_configstack" Orientation="Vertical" VerticalAlignment="Stretch" Visibility="Visible">
             <TextBlock Foreground="White" Margin="50,50,0,0" FontSize="72">DigiSign Registration</TextBlock>
@@ -84,23 +84,19 @@
         <!--END SPONSORS PAGE -->
 
         <!--BEGIN MENU PAGE -->
-        <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" x:Name="ctr_menu" Visibility="Collapsed" Background="Black">
-            <TextBlock Foreground="White" FontSize="100" TextAlignment="Center" Margin="10" x:Name="txt_menu_heading">Menu</TextBlock>
-            <Grid x:Name="menugrid" HorizontalAlignment="Stretch">
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="50"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="400"/>
-                    <ColumnDefinition Width="50"/>
-                </Grid.ColumnDefinitions>
+        <StackPanel Orientation="Vertical" x:Name="ctr_menu" Visibility="Collapsed" Background="Black" RenderTransformOrigin="0,1" Margin="420,-420,420,-420" UseLayoutRounding="False" d:LayoutRounding="Auto" Width="1080" Height="1920" VerticalAlignment="Top" HorizontalAlignment="Left">
+            <StackPanel.RenderTransform>
+                <CompositeTransform Rotation="-90" TranslateX="1500" TranslateY="-420"/>
+            </StackPanel.RenderTransform>
 
-                <StackPanel x:Name="sp_menu" Grid.Row="0" Grid.Column="1"></StackPanel>
+            <TextBlock Foreground="White" FontSize="96" TextAlignment="Center" Margin="10" x:Name="txt_menu_heading">Menu</TextBlock>
 
-                
-            </Grid>
+            <Image x:Name="img_menu_qr" Height="256" />
+
+            <StackPanel x:Name="sp_menu" >
+                <TextBlock FontSize="72" Width="1072">Menu item</TextBlock>
+            </StackPanel>
+
         </StackPanel>
         <!--END MENU PAGE -->
 
