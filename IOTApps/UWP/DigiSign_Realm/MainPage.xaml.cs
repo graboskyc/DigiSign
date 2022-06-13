@@ -216,6 +216,7 @@ namespace DigiSign_Realm
                     sp_menu.UpdateLayout();
                     _currentTimer = 5;
                     await Task.Delay(TimeSpan.FromSeconds(_currentTimer));
+                    
                 }
             }
 
@@ -308,9 +309,17 @@ namespace DigiSign_Realm
                                 menuID = p.Split("_")[1];
                             }
                         }
-
-                        await DisplayMenu(menuID);
-                        _currentIndex = 0;
+                        try
+                        {
+                            _disTimer.Stop();
+                            await DisplayMenu(menuID);
+                        }
+                        catch (Exception ex)
+                        {
+                            _disTimer.Stop();
+                            sp_menu.Children.Clear();
+                            _currentIndex = 0;
+                        }
                     }
                 }
 
